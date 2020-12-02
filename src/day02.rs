@@ -53,16 +53,11 @@ fn is_valid_2(line: &str, regex: &Regex) -> bool {
         let letter = cap[3].as_bytes()[0];
         let passwd = cap[4].as_bytes();
 
-        let mut matches = 0;
+        let has_letter_at_pos = |passwd: &[u8], letter, pos|
+            pos < passwd.len() && passwd[pos] == letter;
 
-        if pos1 < passwd.len() && passwd[pos1] == letter {
-            matches += 1;
-        }
-        if pos2 < passwd.len() && passwd[pos2] == letter {
-            matches += 1;
-        }
-
-        return matches == 1;
+        return has_letter_at_pos(passwd, letter, pos1)
+             ^ has_letter_at_pos(passwd, letter, pos2);
     }
 
     false

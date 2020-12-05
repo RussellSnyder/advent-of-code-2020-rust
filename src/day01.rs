@@ -40,7 +40,8 @@ pub fn part2(inp: String) {
 
 fn read_numbers(inp: String) -> Vec<i32> {
     let lines = inp.split("\n").collect::<Vec<&str>>();
-    lines.iter()
+    lines
+        .iter()
         .filter(|line| line.len() > 0)
         .map(|x| x.parse::<i32>().unwrap())
         .collect::<Vec<i32>>()

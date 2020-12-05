@@ -13,7 +13,27 @@ pub fn part1(inp: String) {
     println!("max seat id: {}", max_seat_id);
 }
 
-pub fn part2(_inp: String) {}
+pub fn part2(inp: String) {
+    let lines = read_lines(&inp);
+
+    let mut seat_ids: Vec<u16> = lines
+        .iter()
+        .map(|line| convert_to_rowcol(line))
+        .map(|(row, col)| calc_seat_id(row, col))
+        .collect();
+
+    seat_ids.sort();
+
+    let mut last = seat_ids[0];
+    for cur in &seat_ids[1..] {
+        if cur - 1 != last {
+            break
+        }
+        last = *cur;
+    }
+
+    println!("your seat id: {}", last + 1);
+}
 
 fn read_lines(inp: &str) -> Vec<&str> {
     inp.split("\n")

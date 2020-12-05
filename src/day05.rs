@@ -1,3 +1,6 @@
+// extern crate partial_application;
+use partial_application::partial;
+
 pub fn part1(inp: String) {
     let lines = read_lines(&inp);
 
@@ -26,30 +29,25 @@ fn convert_to_rowcol(line: &str) -> (u8, u8) {
     let row_str = &line[..7];
     let col_str = &line[7..];
 
+    let convert_rowstr_to_number = partial!(convert_code_to_number => 'F', 'B', _);
+    let convert_colstr_to_number = partial!(convert_code_to_number => 'L', 'R', _);
+
     let row = convert_rowstr_to_number(row_str);
     let col = convert_colstr_to_number(col_str);
 
     (row, col)
 }
 
-fn convert_rowstr_to_number(row_str: &str) -> u8 {
-    row_str
-        .chars()
-        .map(|c| match c {
-            'F' => 0,
-            'B' => 1,
-            _ => panic!("unknown row char {}", c),
-        })
-        .fold(0, |acc, cur| acc * 2 + cur)
-}
-
-fn convert_colstr_to_number(col_str: &str) -> u8 {
-    col_str
-        .chars()
-        .map(|c| match c {
-            'L' => 0,
-            'R' => 1,
-            _ => panic!("unknown col char {}", c),
+fn convert_code_to_number(zero_char: char, one_char: char, code: &str) -> u8 {
+    code.chars()
+        .map(|c| {
+            if c == zero_char {
+                0
+            } else if c == one_char {
+                1
+            } else {
+                panic!("unknown char {}, expected {} or {}", c, zero_char, one_char)
+            }
         })
         .fold(0, |acc, cur| acc * 2 + cur)
 }
@@ -86,20 +84,20 @@ mod test {
     pub fn converts_fffffff_to_0() {
         let input = "FFFFFFF";
         let expected = 0;
-        assert_eq!(convert_rowstr_to_number(input), expected);
+        assert_eq!(convert_code_to_number('F', 'B', input), expected);
     }
 
     #[test]
     pub fn converts_ffffffb_to_1() {
         let input = "FFFFFFB";
         let expected = 1;
-        assert_eq!(convert_rowstr_to_number(input), expected);
+        assert_eq!(convert_code_to_number('F', 'B', input), expected);
     }
 
     #[test]
     pub fn converts_bbbbbbb_to_127() {
         let input = "BBBBBBB";
         let expected = 127;
-        assert_eq!(convert_rowstr_to_number(input), expected);
+        assert_eq!(convert_code_to_number('F', 'B', input), expected);
     }
 }

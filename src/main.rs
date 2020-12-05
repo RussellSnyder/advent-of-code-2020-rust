@@ -3,7 +3,7 @@
 use std::env;
 use std::fs;
 use std::io;
-use std::time::{Instant, Duration};
+use std::time::{Duration, Instant};
 
 use advent_of_code_2020::{get_day, noop};
 
@@ -51,16 +51,13 @@ fn main() {
         Err(_) => {
             println!("Invalid day number: {}", day);
             return;
-        },
+        }
     };
     // Read input file
     let cwd = env::current_dir().unwrap();
-    let filename = cwd
-        .join("inputs")
-        .join(format!("day{:02}.txt", day_num));
+    let filename = cwd.join("inputs").join(format!("day{:02}.txt", day_num));
     println!("Reading {}", filename.display());
-    let input = fs::read_to_string(filename)
-        .expect("Error while reading");
+    let input = fs::read_to_string(filename).expect("Error while reading");
 
     // Get corresponding function
 
